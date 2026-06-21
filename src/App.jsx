@@ -8,6 +8,7 @@ import { Badge } from "../Pocket Design System/components/core/Badge.jsx";
 import { HomeScreen, SearchTrigger } from "./HomeScreen.jsx";
 import { Sidebar } from "./Sidebar.jsx";
 import { ThemePicker, normalizeTheme, normalizeMode, normalizeDark } from "./ThemePicker.jsx";
+import { NotesButton } from "./Notes.jsx";
 import { ErrorBoundary, ToolLoading } from "./ErrorBoundary.jsx";
 import { POCKET_TOOLS, POCKET_CATEGORIES } from "./tools-data.js";
 
@@ -182,6 +183,7 @@ function TopBar({ tool, onHome, onOpenPalette, starred, onStar, theme, onSetThem
       ) : null}
       <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
         {tool ? <SearchTrigger onClick={onOpenPalette} /> : null}
+        <NotesButton />
         <ThemePicker theme={theme} onChange={onSetTheme} dark={darkLevel} onSetDark={onSetDark} />
         <IconButton icon={mode === "dark" ? "sun" : "moon"} label="Toggle light / dark" onClick={onToggleMode} />
       </span>

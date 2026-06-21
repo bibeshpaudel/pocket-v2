@@ -1059,7 +1059,7 @@ export function TimezoneConverterScreen() {
 }
 
 export function QrCodeScreen() {
-  const [input, setInput] = React.useState("https://pocket.dev");
+  const [input, setInput] = React.useState("https://pocket-live.vercel.app");
   const [qrDataUrl, setQrDataUrl] = React.useState("");
 
   React.useEffect(() => {
