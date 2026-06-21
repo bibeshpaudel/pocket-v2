@@ -1,0 +1,16 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Amber — brand hue" subtitle="The only brand color, from the mark (#F59E0B)" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px;background:var(--surface-app);">
+  <div id="row" style="display:flex;gap:6px;"></div>
+  <script>
+    const vals = [["amber-100","#FCEFD2"],["amber-200","#FADFA6"],["amber-300","#F8C964"],["amber-500","#F59E0B"],["amber-600","#D97706"],["amber-700","#B45309"],["amber-900","#7A4A08"]];
+    document.getElementById("row").innerHTML = vals.map(([n,h]) =>
+      '<div style="flex:1;display:flex;flex-direction:column;gap:6px;">' +
+      '<div style="height:64px;border-radius:8px;border:1px solid var(--border-subtle);background:var(' + "'--" + n + "'" + ');' + (n==="amber-500" ? 'outline:2px solid var(--sand-900);outline-offset:2px;' : '') + '"></div>' +
+      '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);line-height:1.4;">' + n.replace("amber-","") + (n==="amber-500" ? " ●" : "") + '<br><span style="color:var(--text-tertiary)">' + h + '</span></div></div>'
+    ).join("");
+  </script>
+</body>
+</html>

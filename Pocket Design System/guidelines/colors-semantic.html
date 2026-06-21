@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Functional earth tones" subtitle="Moss = success, clay = danger, ochre = warning. No blues." -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px;background:var(--surface-app);font-family:var(--font-sans);">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+    <div style="border:1px solid var(--border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-raised);">
+      <div style="height:46px;background:var(--moss-600);"></div>
+      <div style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;font-weight:600;">Moss</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;background:var(--ok-soft);color:var(--moss-600);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;">Valid JSON</span>
+      </div>
+      <div style="padding:0 12px 10px;font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);">--ok · --ok-soft</div>
+    </div>
+    <div style="border:1px solid var(--border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-raised);">
+      <div style="height:46px;background:var(--clay-600);"></div>
+      <div style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;font-weight:600;">Clay</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;background:var(--danger-soft);color:var(--clay-600);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;">Parse error</span>
+      </div>
+      <div style="padding:0 12px 10px;font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);">--danger · --danger-soft</div>
+    </div>
+    <div style="border:1px solid var(--border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-raised);">
+      <div style="height:46px;background:var(--amber-500);"></div>
+      <div style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;font-weight:600;">Ochre</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;background:var(--warn-soft);color:var(--warn);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;">Weak key</span>
+      </div>
+      <div style="padding:0 12px 10px;font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);">--warn · --warn-soft</div>
+    </div>
+  </div>
+</body>
+</html>

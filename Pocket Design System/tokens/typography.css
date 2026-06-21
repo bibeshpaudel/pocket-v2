@@ -1,0 +1,34 @@
+/* Pocket — typography tokens.
+   Two faces only: Instrument Sans for UI, JetBrains Mono for anything a
+   developer might copy — code, values, shortcuts, counts, hashes. */
+
+:root {
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* size scale (UI base is 14px — dense, readable) */
+  --text-xs:   12px;
+  --text-sm:   13px;
+  --text-base: 14px;
+  --text-md:   16px;
+  --text-lg:   19px;
+  --text-xl:   24px;
+  --text-2xl:  30px;
+  --text-3xl:  38px;
+
+  /* line heights */
+  --leading-tight:  1.2;
+  --leading-snug:   1.35;
+  --leading-normal: 1.5;
+  --leading-code:   1.6;
+
+  /* weights */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* letter spacing */
+  --tracking-tight: -0.015em;
+  --tracking-caps:   0.07em;   /* uppercase labels, category names */
+}

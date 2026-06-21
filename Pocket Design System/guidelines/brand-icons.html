@@ -1,0 +1,18 @@
+<!-- @dsCard group="Brand" viewport="700x190" name="Iconography — Lucide" subtitle="1.5–2px stroke outline icons, currentColor; one glyph per category" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px 22px;background:var(--surface-app);font-family:var(--font-sans);">
+  <div id="grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:10px;text-align:center;"></div>
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
+  <script>
+    const cats = [["braces","Formatters"],["terminal","Development"],["sparkles","Generators"],["repeat","Converters"],["type","Text"],["shield","Security"],["image","Images"],["file-text","PDF"],["table","CSV"],["globe","Web"]];
+    document.getElementById("grid").innerHTML = cats.map(([ic,label]) =>
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">' +
+      '<span style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--surface-raised);border:1px solid var(--border-default);display:grid;place-items:center;color:var(--text-secondary);"><i data-lucide="' + ic + '" style="width:20px;height:20px;"></i></span>' +
+      '<span style="font-size:10px;color:var(--text-tertiary);">' + label + '</span></div>'
+    ).join("");
+    lucide.createIcons();
+  </script>
+</body>
+</html>

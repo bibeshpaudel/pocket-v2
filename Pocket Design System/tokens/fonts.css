@@ -1,0 +1,8 @@
+/* Pocket — webfonts.
+   No font binaries were provided with the brand, so Pocket uses Google Fonts:
+   - Instrument Sans  — UI sans (warm, compact humanist grotesque)
+   - JetBrains Mono   — code, data, numerals, shortcuts
+   If the brand later supplies licensed font files, replace these imports
+   with local @font-face rules pointing at assets/fonts/. */
+
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600;700&display=swap");

@@ -1,0 +1,48 @@
+{
+  "name": "pocket-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "icons": "node scripts/build-icons.mjs",
+    "predev": "node scripts/build-icons.mjs",
+    "prebuild": "node scripts/build-icons.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@peculiar/x509": "^1.14.3",
+    "blueimp-md5": "^2.19.0",
+    "dompurify": "^3.4.10",
+    "hash-wasm": "^4.12.0",
+    "heic-to": "^1.5.2",
+    "heic2any": "^0.0.4",
+    "highlight.js": "^11.11.1",
+    "js-yaml": "^5.0.0",
+    "jspdf": "^4.2.1",
+    "katex": "^0.17.0",
+    "mammoth": "^1.12.0",
+    "marked": "^18.0.5",
+    "marked-footnote": "^1.4.0",
+    "marked-highlight": "^2.2.4",
+    "marked-katex-extension": "^5.1.10",
+    "mermaid": "^11.15.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.0.227",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "lucide-static": "^0.469.0",
+    "vite": "^5.3.1",
+    "vitest": "^4.1.9"
+  }
+}

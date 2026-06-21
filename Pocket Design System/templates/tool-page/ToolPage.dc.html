@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Tool page" description="Pocket tool workspace — top bar, options row, input + output panels side by side" -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="height: 100vh; display: flex; flex-direction: column; background: var(--surface-app); font-family: var(--font-sans); color: var(--text-primary);">
+
+  <header data-screen-label="Tool page" style="flex: none; display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 16px; border-bottom: 1px solid var(--border-subtle);">
+    <x-import component-from-global-scope="PocketDesignSystem_654e67.Logo" size="{{ 24 }}" wordmark="{{ false }}" hint-size="24px,24px"></x-import>
+    <span style="color: var(--text-tertiary); font-size: 13px;">›</span>
+    <span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px;">
+      <span style="width: 26px; height: 26px; border-radius: 8px; background: var(--accent-soft); color: var(--amber-700); display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px;">{ }</span>
+      JSON Formatter
+    </span>
+    <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-tertiary);">
+      Search tools
+      <kbd style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); background: var(--surface-sunken); border: 1px solid var(--border-default); border-bottom-width: 2px; border-radius: 6px; padding: 2px 7px;">⌘</kbd>
+      <kbd style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); background: var(--surface-sunken); border: 1px solid var(--border-default); border-bottom-width: 2px; border-radius: 6px; padding: 2px 7px;">K</kbd>
+    </span>
+  </header>
+
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 16px;">
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="display: inline-flex; gap: 2px; padding: 3px; background: var(--surface-sunken); border: 1px solid var(--border-subtle); border-radius: 10px;">
+        <span style="height: 26px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 7px; font-size: 12px; font-weight: 600; background: var(--surface-raised); border: 1px solid var(--border-default); box-shadow: var(--shadow-1);">Pretty</span>
+        <span style="height: 26px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 7px; font-size: 12px; font-weight: 600; color: var(--text-secondary);">Minify</span>
+      </span>
+      <span style="font-size: 12px; color: var(--text-tertiary);">Replace with your tool's options</span>
+    </div>
+
+    <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+
+      <section style="display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--surface-sunken); border: 1px solid var(--border-default); border-radius: var(--radius-lg);">
+        <header style="flex: none; display: flex; align-items: center; height: 42px; padding: 0 14px; border-bottom: 1px solid var(--border-subtle);">
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--text-tertiary);">Input</span>
+          <span style="margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary);">{{ chars }}</span>
+        </header>
+        <textarea spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" placeholder="Paste JSON here…" style="flex: 1; min-height: 0; border: none; outline: none; resize: none; background: transparent; padding: 12px 14px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text-primary);"></textarea>
+      </section>
+
+      <section style="display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--code-bg); border-radius: var(--radius-lg);">
+        <header style="flex: none; display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 8px 0 14px; border-bottom: 1px solid var(--code-line);">
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--syn-comment);">Output</span>
+          <sc-if value="{{ isValid }}" hint-placeholder-val="{{ true }}">
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); font-size: 12px; font-weight: 600;">Valid JSON</span>
+          </sc-if>
+          <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; background: var(--danger-soft); color: var(--danger); font-size: 12px; font-weight: 600;">Parse error</span>
+          </sc-if>
+          <x-import component-from-global-scope="PocketDesignSystem_654e67.CopyButton" get-text="{{ getOutput }}" on-dark="{{ true }}" hint-size="70px,28px"></x-import>
+        </header>
+        <pre style="flex: 1; min-height: 0; margin: 0; padding: 12px 16px; overflow: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--code-fg);">{{ output }}</pre>
+      </section>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { input: '{"name":"pocket","tools":36,"client_side":true}' };
+
+  renderVals() {
+    const input = this.state.input;
+    let output = "";
+    let isValid = false;
+    let isError = false;
+    if (input.trim()) {
+      try {
+        output = JSON.stringify(JSON.parse(input), null, 2);
+        isValid = true;
+      } catch (e) {
+        output = String((e && e.message) || e);
+        isError = true;
+      }
+    }
+    return {
+      input: input,
+      output: output,
+      isValid: isValid,
+      isError: isError,
+      chars: input.length.toLocaleString() + " chars",
+      onInput: (e) => this.setState({ input: e.target.value }),
+      getOutput: () => output,
+    };
+  }
+}
+</script>
+</body>
+</html>

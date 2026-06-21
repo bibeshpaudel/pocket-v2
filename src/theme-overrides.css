@@ -1,0 +1,155 @@
+/* Pocket — themes (palette) × mode (light/dark) × dark-level, all orthogonal.
+ *
+ * <html> carries THREE attributes, set by App:
+ *   data-theme="<palette>"        → swaps only the ACCENT family (tuned per mode)
+ *   data-mode="light|dark"        → light surfaces = DS :root; dark = the ramp below
+ *   data-dark="soft|dim|deep"     → in dark mode, how dark the surfaces are
+ *
+ * Only design-system token VALUES are remapped — no component selectors, no new styles.
+ * Surfaces come from the mode/level rules; accents from the per-theme/per-mode rules; the
+ * two never set the same tokens, so they compose cleanly regardless of order.
+ *
+ * To add a theme: add a {light,dark} accent pair + a THEMES entry in ThemePicker.jsx.
+ */
+
+/* ════════ SURFACES ════════ */
+/* Dark, "dim" (default level): full surface + text + code ramp. */
+html[data-mode="dark"] {
+  --surface-sunken: #121110;
+  --surface-app: #171614;
+  --surface-raised: #211f1c;
+  --surface-hover: #2b2825;
+  --surface-inverse: #f0eadd;
+  --border-subtle: #2a2724;
+  --border-default: #383430;
+  --border-strong: #4c4742;
+  --text-primary: #f5f1ea;
+  --text-secondary: #bdb4a8;
+  --text-tertiary: #8b8278;
+  --text-inverse: #1e1a14;
+  --ok-soft: #28301a;
+  --danger-soft: #3d211b;
+  --warn-soft: #3a2d12;
+  --code-bg: #0e0d0c;
+  --code-bg-deep: #090807;
+  --code-line: #221f1c;
+}
+/* Lighter dark — easy on the eyes. */
+html[data-mode="dark"][data-dark="soft"] {
+  --surface-sunken: #1a1816;
+  --surface-app: #201d19;
+  --surface-raised: #2a2622;
+  --surface-hover: #332f29;
+  --border-subtle: #322e29;
+  --border-default: #403b34;
+  --border-strong: #544e45;
+  --code-bg: #16140f;
+  --code-bg-deep: #100e0a;
+  --code-line: #2c2820;
+}
+/* Near-black ink — maximum depth. */
+html[data-mode="dark"][data-dark="deep"] {
+  --surface-sunken: #0c0b0a;
+  --surface-app: #0f0e0d;
+  --surface-raised: #1a1816;
+  --surface-hover: #252220;
+  --border-subtle: #242120;
+  --border-default: #322e2a;
+  --border-strong: #46413b;
+  --code-bg: #080706;
+  --code-bg-deep: #040403;
+  --code-line: #201d1a;
+}
+/* Light-mode surfaces come from the design system :root (warm paper). */
+
+/* ════════ ACCENTS (per theme × mode) ════════ */
+
+/* ── Amber (brand) — light accent = :root amber, no rule needed ─────────── */
+html[data-theme="amber"][data-mode="dark"] {
+  --accent-soft: #3a2c11; --amber-700: #e9ac52;
+  --text-accent: #f8c964; --text-on-accent: #2a1f08;
+}
+
+/* ── Forest (green) ────────────────────────────────────────────────────── */
+html[data-theme="forest"][data-mode="light"] {
+  --accent: #5f8a36; --accent-strong: #517a2c; --accent-soft: #e7eed5; --focus-ring: #5f8a36;
+  --amber-500: #5f8a36; --amber-600: #517a2c; --amber-700: #4a6b27;
+  --text-accent: #4a6b27; --text-on-accent: #f7faf0;
+}
+html[data-theme="forest"][data-mode="dark"] {
+  --accent: #9dbe5a; --accent-strong: #8aaa47; --accent-soft: #1f2a12; --focus-ring: #9dbe5a;
+  --amber-500: #9dbe5a; --amber-600: #8aaa47; --amber-700: #b6d26b;
+  --text-accent: #b6d26b; --text-on-accent: #11160a;
+}
+
+/* ── Teal ──────────────────────────────────────────────────────────────── */
+html[data-theme="teal"][data-mode="light"] {
+  --accent: #0f8a86; --accent-strong: #0c7470; --accent-soft: #d8efed; --focus-ring: #0f8a86;
+  --amber-500: #0f8a86; --amber-600: #0c7470; --amber-700: #0a625f;
+  --text-accent: #0a625f; --text-on-accent: #f0fbfa;
+}
+html[data-theme="teal"][data-mode="dark"] {
+  --accent: #4cc4bd; --accent-strong: #36b0a8; --accent-soft: #0e2a28; --focus-ring: #4cc4bd;
+  --amber-500: #4cc4bd; --amber-600: #36b0a8; --amber-700: #74d6d0;
+  --text-accent: #74d6d0; --text-on-accent: #08201e;
+}
+
+/* ── Rose (terracotta / clay) ──────────────────────────────────────────── */
+html[data-theme="rose"][data-mode="light"] {
+  --accent: #c1453c; --accent-strong: #a83930; --accent-soft: #f7e0dc; --focus-ring: #c1453c;
+  --amber-500: #c1453c; --amber-600: #a83930; --amber-700: #8f2f27;
+  --text-accent: #8f2f27; --text-on-accent: #fff5f3;
+}
+html[data-theme="rose"][data-mode="dark"] {
+  --accent: #e07a6a; --accent-strong: #cf6353; --accent-soft: #341712; --focus-ring: #e07a6a;
+  --amber-500: #e07a6a; --amber-600: #cf6353; --amber-700: #ee9384;
+  --text-accent: #ee9384; --text-on-accent: #2a0d08;
+}
+
+/* ── Crimson (deep red) ────────────────────────────────────────────────── */
+html[data-theme="crimson"][data-mode="light"] {
+  --accent: #c01f3c; --accent-strong: #a4182f; --accent-soft: #f8dbdf; --focus-ring: #c01f3c;
+  --amber-500: #c01f3c; --amber-600: #a4182f; --amber-700: #8a1428;
+  --text-accent: #8a1428; --text-on-accent: #fff2f4;
+}
+html[data-theme="crimson"][data-mode="dark"] {
+  --accent: #ec5e76; --accent-strong: #dc4862; --accent-soft: #350f17; --focus-ring: #ec5e76;
+  --amber-500: #ec5e76; --amber-600: #dc4862; --amber-700: #f5879a;
+  --text-accent: #f5879a; --text-on-accent: #2a060f;
+}
+
+/* ── Berry (magenta / pink) ────────────────────────────────────────────── */
+html[data-theme="berry"][data-mode="light"] {
+  --accent: #bb2e8a; --accent-strong: #a02676; --accent-soft: #f7dcec; --focus-ring: #bb2e8a;
+  --amber-500: #bb2e8a; --amber-600: #a02676; --amber-700: #871f63;
+  --text-accent: #871f63; --text-on-accent: #fff3fa;
+}
+html[data-theme="berry"][data-mode="dark"] {
+  --accent: #e072b3; --accent-strong: #cf5ca2; --accent-soft: #33122a; --focus-ring: #e072b3;
+  --amber-500: #e072b3; --amber-600: #cf5ca2; --amber-700: #ec92c7;
+  --text-accent: #ec92c7; --text-on-accent: #2a0a20;
+}
+
+/* ── Violet (orchid / plum) ────────────────────────────────────────────── */
+html[data-theme="violet"][data-mode="light"] {
+  --accent: #8a4fa3; --accent-strong: #774291; --accent-soft: #efe2f4; --focus-ring: #8a4fa3;
+  --amber-500: #8a4fa3; --amber-600: #774291; --amber-700: #5f3576;
+  --text-accent: #5f3576; --text-on-accent: #fdf7ff;
+}
+html[data-theme="violet"][data-mode="dark"] {
+  --accent: #bd86d0; --accent-strong: #a96fc0; --accent-soft: #291433; --focus-ring: #bd86d0;
+  --amber-500: #bd86d0; --amber-600: #a96fc0; --amber-700: #cf9fde;
+  --text-accent: #cf9fde; --text-on-accent: #1c0d23;
+}
+
+/* ── Slate (neutral warm-gray / monochrome) ────────────────────────────── */
+html[data-theme="slate"][data-mode="light"] {
+  --accent: #7a7163; --accent-strong: #665e51; --accent-soft: #e8e4dc; --focus-ring: #7a7163;
+  --amber-500: #7a7163; --amber-600: #665e51; --amber-700: #544d42;
+  --text-accent: #544d42; --text-on-accent: #fbf9f5;
+}
+html[data-theme="slate"][data-mode="dark"] {
+  --accent: #a89e8e; --accent-strong: #968c7c; --accent-soft: #26231e; --focus-ring: #a89e8e;
+  --amber-500: #a89e8e; --amber-600: #968c7c; --amber-700: #bcb3a4;
+  --text-accent: #bcb3a4; --text-on-accent: #1c1812;
+}

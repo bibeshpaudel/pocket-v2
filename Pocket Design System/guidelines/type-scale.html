@@ -1,0 +1,17 @@
+<!-- @dsCard group="Type" viewport="700x290" name="Type scale" subtitle="Eight steps, 12 → 38px; UI base is 14px" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px 22px;background:var(--surface-app);font-family:var(--font-sans);">
+  <div id="rows" style="display:flex;flex-direction:column;gap:2px;"></div>
+  <script>
+    const steps = [["--text-3xl","38"],["--text-2xl","30"],["--text-xl","24"],["--text-lg","19"],["--text-md","16"],["--text-base","14"],["--text-sm","13"],["--text-xs","12"]];
+    document.getElementById("rows").innerHTML = steps.map(([t,px]) =>
+      '<div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--border-subtle);padding:3px 0;">' +
+      '<code style="width:90px;font-size:10px;color:var(--text-tertiary);">' + t + '</code>' +
+      '<code style="width:34px;font-size:10px;color:var(--text-tertiary);">' + px + 'px</code>' +
+      '<span style="font-size:var(' + t + ');font-weight:' + (px>=19?600:400) + ';letter-spacing:' + (px>=24?'var(--tracking-tight)':'0') + ';white-space:nowrap;overflow:hidden;">Format JSON instantly</span></div>'
+    ).join("");
+  </script>
+</body>
+</html>

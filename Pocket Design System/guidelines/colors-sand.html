@@ -1,0 +1,16 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Sand — warm neutrals" subtitle="Paper-and-ink base scale; surfaces, borders, text" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px;background:var(--surface-app);">
+  <div id="row" style="display:flex;gap:6px;"></div>
+  <script>
+    const vals = [["sand-0","#FCFAF5"],["sand-50","#F7F3EA"],["sand-100","#F0EADD"],["sand-200","#E4DCCA"],["sand-300","#D1C6AE"],["sand-400","#A99D82"],["sand-500","#847962"],["sand-600","#645B49"],["sand-700","#463F33"],["sand-800","#2E2921"],["sand-900","#1E1A14"]];
+    document.getElementById("row").innerHTML = vals.map(([n,h]) =>
+      '<div style="flex:1;display:flex;flex-direction:column;gap:6px;">' +
+      '<div style="height:64px;border-radius:8px;border:1px solid var(--border-subtle);background:var(' + "'--" + n + "'" + ')"></div>' +
+      '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);line-height:1.4;">' + n.replace("sand-","") + '<br><span style="color:var(--text-tertiary)">' + h + '</span></div></div>'
+    ).join("");
+  </script>
+</body>
+</html>

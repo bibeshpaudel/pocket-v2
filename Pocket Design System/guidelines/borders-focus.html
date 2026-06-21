@@ -1,0 +1,14 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Borders, focus & selection" subtitle="1px borders everywhere; 2px amber focus ring, 2px offset" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:20px 22px;background:var(--surface-app);font-family:var(--font-sans);">
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div style="width:108px;height:60px;border-radius:var(--radius-md);background:var(--surface-raised);border:1px solid var(--border-subtle);display:grid;place-items:end start;"><code style="font-size:9.5px;color:var(--text-tertiary);padding:6px 8px;">subtle</code></div>
+    <div style="width:108px;height:60px;border-radius:var(--radius-md);background:var(--surface-raised);border:1px solid var(--border-default);display:grid;place-items:end start;"><code style="font-size:9.5px;color:var(--text-tertiary);padding:6px 8px;">default</code></div>
+    <div style="width:108px;height:60px;border-radius:var(--radius-md);background:var(--surface-raised);border:1px solid var(--border-strong);display:grid;place-items:end start;"><code style="font-size:9.5px;color:var(--text-tertiary);padding:6px 8px;">strong</code></div>
+    <div style="width:108px;height:60px;border-radius:var(--radius-md);background:var(--surface-raised);border:1px solid var(--border-default);outline:2px solid var(--focus-ring);outline-offset:2px;display:grid;place-items:end start;"><code style="font-size:9.5px;color:var(--text-tertiary);padding:6px 8px;">:focus-visible</code></div>
+    <div style="font-size:14px;max-width:150px;"><span style="background:var(--amber-200);">Selected text uses amber-200.</span></div>
+  </div>
+</body>
+</html>

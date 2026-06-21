@@ -1,0 +1,103 @@
+/* Pocket — color tokens.
+   Warm, earthy, paper-and-ink. Amber is the only brand hue (from the mark);
+   moss + clay are functional earth tones. No blues. */
+
+:root {
+  /* ---- base: sand (warm stone neutrals) ---- */
+  --sand-0:   #FCFAF5;
+  --sand-50:  #F7F3EA;
+  --sand-100: #F0EADD;
+  --sand-200: #E4DCCA;
+  --sand-300: #D1C6AE;
+  --sand-400: #A99D82;
+  --sand-500: #847962;
+  --sand-600: #645B49;
+  --sand-700: #463F33;
+  --sand-800: #2E2921;
+  --sand-900: #1E1A14;
+  --white-warm: #FFFEFB;
+
+  /* ---- brand: amber ---- */
+  --amber-100: #FCEFD2;
+  --amber-200: #FADFA6;
+  --amber-300: #F8C964;
+  --amber-500: #F59E0B;  /* the mark */
+  --amber-600: #D97706;
+  --amber-700: #B45309;
+  --amber-900: #7A4A08;
+
+  /* ---- functional earth tones ---- */
+  --moss-600: #6B7F3F;   /* success */
+  --moss-100: #EEF1E0;
+  --clay-600: #BF4632;   /* danger */
+  --clay-100: #F8E5DF;
+  --ochre-700: #B45309;  /* warning text (= amber-700) */
+  --ochre-100: #FCEFD2;
+
+  /* ---- code pane (always dark, both themes) ---- */
+  --code-bg:        #26211A;
+  --code-bg-deep:   #1E1A14;
+  --code-fg:        #F0EADD;
+  --code-line:      #3A3328;
+  --syn-key:        #F8C964;  /* properties, tags */
+  --syn-string:     #B5C98A;  /* strings */
+  --syn-number:     #E8A87C;  /* numbers, constants */
+  --syn-keyword:    #E0926B;  /* keywords, operators */
+  --syn-comment:    #847962;  /* comments */
+  --syn-punct:      #A99D82;  /* punctuation, braces */
+
+  /* ---- semantic aliases ---- */
+  --surface-app:     var(--sand-0);
+  --surface-raised:  var(--white-warm);
+  --surface-sunken:  var(--sand-50);
+  --surface-hover:   var(--sand-100);
+  --surface-inverse: var(--sand-900);
+
+  --text-primary:   var(--sand-900);
+  --text-secondary: var(--sand-600);
+  --text-tertiary:  var(--sand-400);
+  --text-inverse:   var(--sand-50);
+  --text-accent:    var(--amber-700);
+  --text-on-accent: #2A1F08;
+
+  --border-subtle:  var(--sand-100);
+  --border-default: var(--sand-200);
+  --border-strong:  var(--sand-300);
+
+  --accent:        var(--amber-500);
+  --accent-strong: var(--amber-600);
+  --accent-soft:   var(--amber-100);
+  --focus-ring:    var(--amber-500);
+
+  --ok:          var(--moss-600);
+  --ok-soft:     var(--moss-100);
+  --danger:      var(--clay-600);
+  --danger-soft: var(--clay-100);
+  --warn:        var(--ochre-700);
+  --warn-soft:   var(--ochre-100);
+}
+
+/* ---- dark theme (opt-in: <html data-theme="dark">) ---- */
+[data-theme="dark"] {
+  --surface-app:     #16120D;
+  --surface-raised:  #211C15;
+  --surface-sunken:  #120F0A;
+  --surface-hover:   #2A241B;
+  --surface-inverse: var(--sand-50);
+
+  --text-primary:   #F0EADD;
+  --text-secondary: #A99D82;
+  --text-tertiary:  #6E6452;
+  --text-inverse:   var(--sand-900);
+  --text-accent:    var(--amber-300);
+  --text-on-accent: #2A1F08;
+
+  --border-subtle:  #2A241B;
+  --border-default: #352E22;
+  --border-strong:  #463F33;
+
+  --accent-soft:   #3A2D12;
+  --ok-soft:       #28301A;
+  --danger-soft:   #3D211B;
+  --warn-soft:     #3A2D12;
+}

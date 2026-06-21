@@ -1,0 +1,17 @@
+<!-- @dsCard group="Spacing" viewport="700x210" name="Spacing scale" subtitle="4px grid; card padding 16, section gaps 24" -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"></head>
+<body style="margin:0;padding:18px 22px;background:var(--surface-app);font-family:var(--font-sans);">
+  <div id="rows" style="display:flex;flex-direction:column;gap:5px;"></div>
+  <script>
+    const steps = [["--space-1","4"],["--space-2","8"],["--space-3","12"],["--space-4","16"],["--space-6","24"],["--space-8","32"],["--space-12","48"],["--space-16","64"]];
+    document.getElementById("rows").innerHTML = steps.map(([t,px]) =>
+      '<div style="display:flex;align-items:center;gap:14px;">' +
+      '<code style="width:86px;font-size:10px;color:var(--text-tertiary);">' + t + '</code>' +
+      '<code style="width:30px;font-size:10px;color:var(--text-secondary);">' + px + '</code>' +
+      '<span style="height:14px;width:' + px + 'px;background:var(--amber-500);border-radius:3px;"></span></div>'
+    ).join("");
+  </script>
+</body>
+</html>

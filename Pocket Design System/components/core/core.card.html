@@ -1,0 +1,53 @@
+<!-- @dsCard group="Components" viewport="700x260" name="Core — buttons, badges, kbd" subtitle="Button, IconButton, CopyButton, Badge, Kbd, Logo, Icon" -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../styles.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+</head>
+<body style="margin:0;padding:18px 22px;background:var(--surface-app);">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Button, IconButton, CopyButton, Badge, Kbd, Logo } = window.PocketDesignSystem_654e67;
+    const row = { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" };
+    function Card() {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={row}>
+            <Button icon="wand-2">Format</Button>
+            <Button variant="secondary" icon="download">Download</Button>
+            <Button variant="ghost">Clear</Button>
+            <Button variant="danger">Delete</Button>
+            <Button disabled>Format</Button>
+            <Button size="sm" variant="secondary">Minify</Button>
+          </div>
+          <div style={row}>
+            <IconButton icon="settings-2" label="Settings" variant="outline" />
+            <IconButton icon="star" label="Favorite" active fill />
+            <IconButton icon="star" label="Favorite" />
+            <IconButton icon="x" label="Close" size="sm" />
+            <CopyButton text="hello" />
+            <Badge kind="ok" dot>Valid JSON</Badge>
+            <Badge kind="danger">Parse error</Badge>
+            <Badge kind="warn">Weak key</Badge>
+            <Badge kind="accent">New</Badge>
+            <Badge kind="neutral">2,148 chars</Badge>
+          </div>
+          <div style={row}>
+            <Logo size={26} />
+            <Logo size={26} wordmark={false} />
+            <span style={{ fontSize: 13, color: "var(--text-secondary)", display: "inline-flex", alignItems: "center", gap: 8 }}>
+              Open palette <Kbd keys={["⌘", "K"]} /> · Run <Kbd keys={["⌘", "⏎"]} /> · <Kbd>Esc</Kbd>
+            </span>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Card />);
+  </script>
+</body>
+</html>
