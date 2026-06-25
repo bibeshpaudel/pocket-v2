@@ -43,7 +43,7 @@ export function HomeScreen({ tools, categories, favorites, recents, onOpen, onSt
   const favTools = tools.filter((t) => favorites.includes(t.id));
   const recentTools = recents.map((id) => tools.find((t) => t.id === id)).filter(Boolean).slice(0, 4);
   return (
-    <div style={homeStyles.wrap}>
+    <div className="pkt-home-wrap" style={homeStyles.wrap}>
       <h1 style={homeStyles.h1}>What do you need?</h1>
       <p style={homeStyles.sub}>{tools.length} tools, all client-side. Nothing you paste leaves your browser.</p>
       <div style={{ marginTop: 20, maxWidth: 560 }}>

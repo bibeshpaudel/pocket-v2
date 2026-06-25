@@ -8,6 +8,30 @@ const ROW = { fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.7 };
 const CHEVRON_W = 15; // keeps leaf rows aligned with collapsible ones
 const STEP = 14;      // indent per depth level
 
+// One-time focus ring for keyboard users (inline styles can't do :focus-visible).
+if (typeof document !== "undefined" && !document.getElementById("pkt-css-tree")) {
+  const s = document.createElement("style");
+  s.id = "pkt-css-tree";
+  s.textContent = ".pkt-tree-row:focus-visible{outline:2px solid var(--amber-500);outline-offset:-2px;border-radius:var(--radius-sm);}";
+  document.head.appendChild(s);
+}
+
+// Props that make a collapsible row operable by mouse AND keyboard (Enter/Space),
+// and announce its expanded state to assistive tech.
+function toggleProps(open, setOpen) {
+  const toggle = () => setOpen((o) => !o);
+  return {
+    className: "pkt-tree-row",
+    role: "button",
+    tabIndex: 0,
+    "aria-expanded": open,
+    onClick: toggle,
+    onKeyDown: (e) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); toggle(); }
+    },
+  };
+}
+
 function leafColor(v) {
   if (typeof v === "string") return "var(--syn-string)";
   if (typeof v === "number") return "var(--syn-number)";
@@ -44,7 +68,7 @@ function JsonNode({ keyName, value, depth, isArrayItem }) {
   return (
     <div>
       <div style={{ ...ROW, paddingLeft: depth * STEP, cursor: "pointer", display: "flex", alignItems: "center" }}
-        onClick={() => setOpen((o) => !o)}>
+        {...toggleProps(open, setOpen)}>
         <Icon name={open ? "chevron-down" : "chevron-right"} size={13} strokeWidth={2}
           style={{ color: "var(--syn-punct)", flexShrink: 0, width: CHEVRON_W }} />
         {keyLabel}
@@ -125,7 +149,7 @@ function XmlNode({ node, depth }) {
   return (
     <div>
       <div style={{ ...ROW, paddingLeft: depth * STEP, cursor: "pointer", display: "flex", alignItems: "center" }}
-        onClick={() => setOpen((o) => !o)}>
+        {...toggleProps(open, setOpen)}>
         <Icon name={open ? "chevron-down" : "chevron-right"} size={13} strokeWidth={2}
           style={{ color: "var(--syn-punct)", flexShrink: 0, width: CHEVRON_W }} />
         <span style={{ color: "var(--syn-punct)" }}>{"<"}</span>

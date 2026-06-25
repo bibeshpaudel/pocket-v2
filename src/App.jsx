@@ -12,52 +12,23 @@ import { NotesButton } from "./Notes.jsx";
 import { ErrorBoundary, ToolLoading } from "./ErrorBoundary.jsx";
 import { POCKET_TOOLS, POCKET_CATEGORIES } from "./tools-data.js";
 
-// Lazy loaded tool screens
-const JsonFormatterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.JsonFormatterScreen }))
-);
-const XmlFormatterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.XmlFormatterScreen }))
-);
-const Base64Screen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.Base64Screen }))
-);
-const HashScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.HashScreen }))
-);
-const UnitConverterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.UnitConverterScreen }))
-);
-const TimestampConverterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.TimestampConverterScreen }))
-);
-const TimezoneConverterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.TimezoneConverterScreen }))
-);
-const PasswordScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.PasswordScreen }))
-);
-const QrCodeScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.QrCodeScreen }))
-);
-const LoremIpsumScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.LoremIpsumScreen }))
-);
-const UuidScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.UuidScreen }))
-);
-const CaseConverterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.CaseConverterScreen }))
-);
-const WordCounterScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.WordCounterScreen }))
-);
-const RegexScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.RegexScreen }))
-);
-const UrlCodecScreen = lazy(() =>
-  import("./ToolScreens.jsx").then((m) => ({ default: m.UrlCodecScreen }))
-);
+// Lazy loaded tool screens — each core tool is its own chunk so opening one
+// tool doesn't pull in the code for the others.
+const JsonFormatterScreen = lazy(() => import("./tools/core/JsonFormatter.jsx"));
+const XmlFormatterScreen = lazy(() => import("./tools/core/XmlFormatter.jsx"));
+const Base64Screen = lazy(() => import("./tools/core/Base64.jsx"));
+const HashScreen = lazy(() => import("./tools/core/Hash.jsx"));
+const UnitConverterScreen = lazy(() => import("./tools/core/UnitConverter.jsx"));
+const TimestampConverterScreen = lazy(() => import("./tools/core/TimestampConverter.jsx"));
+const TimezoneConverterScreen = lazy(() => import("./tools/core/TimezoneConverter.jsx"));
+const PasswordScreen = lazy(() => import("./tools/core/Password.jsx"));
+const QrCodeScreen = lazy(() => import("./tools/core/QrCode.jsx"));
+const LoremIpsumScreen = lazy(() => import("./tools/core/LoremIpsum.jsx"));
+const UuidScreen = lazy(() => import("./tools/core/Uuid.jsx"));
+const CaseConverterScreen = lazy(() => import("./tools/core/CaseConverter.jsx"));
+const WordCounterScreen = lazy(() => import("./tools/core/WordCounter.jsx"));
+const RegexScreen = lazy(() => import("./tools/core/Regex.jsx"));
+const UrlCodecScreen = lazy(() => import("./tools/core/UrlCodec.jsx"));
 // Heavier tools live in their own module so their data only loads when opened.
 const GitCheatsheetScreen = lazy(() => import("./tools/GitCheatsheet.jsx"));
 const TextDiffScreen = lazy(() => import("./tools/TextDiff.jsx"));
@@ -160,30 +131,37 @@ function save(key, v) {
 
 function TopBar({ tool, onHome, onOpenPalette, starred, onStar, theme, onSetTheme, mode, onToggleMode, darkLevel, onSetDark }) {
   return (
-    <header data-screen-label={tool ? tool.name : "Home"} style={{
+    <header className="pkt-topbar" data-screen-label={tool ? tool.name : "Home"} style={{
       flex: "none", display: "flex", alignItems: "center", gap: 10,
       height: 52, padding: "0 16px",
       background: "var(--surface-app)", borderBottom: "1px solid var(--border-subtle)",
     }}>
-      <button type="button" onClick={onHome} style={{ display: "inline-flex", border: "none", background: "transparent", cursor: "pointer", padding: 4, borderRadius: 8 }}>
+      <button type="button" onClick={onHome} style={{ display: "inline-flex", border: "none", background: "transparent", cursor: "pointer", padding: 4, borderRadius: 8, flex: "none" }}>
         <Logo size={24} wordmark={!tool} />
       </button>
       {tool ? (
-        <span style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-          <Icon name="chevron-right" size={14} style={{ color: "var(--text-tertiary)" }} />
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 600, fontSize: 15 }}>
-            <span style={{ width: 26, height: 26, borderRadius: 8, background: "var(--accent-soft)", color: "var(--amber-700)", display: "grid", placeItems: "center" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: "0 1 auto" }}>
+          <Icon name="chevron-right" size={14} style={{ color: "var(--text-tertiary)", flex: "none" }} />
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 600, fontSize: 15, minWidth: 0 }}>
+            <span style={{ width: 26, height: 26, borderRadius: 8, background: "var(--accent-soft)", color: "var(--amber-700)", display: "grid", placeItems: "center", flex: "none" }}>
               <Icon name={tool.icon} size={14} />
             </span>
-            {tool.name}
+            <span className="pkt-tb-name" style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tool.name}</span>
           </span>
-          <IconButton icon="star" label={starred ? "Unstar" : "Star"} size="sm" active={starred} fill onClick={onStar} />
-          <Badge kind="neutral">{tool.category}</Badge>
+          <span className="pkt-tb-star" style={{ display: "inline-flex", flex: "none" }}>
+            <IconButton icon="star" label={starred ? "Unstar" : "Star"} size="sm" active={starred} fill onClick={onStar} />
+          </span>
+          <span className="pkt-tb-cat" style={{ display: "inline-flex" }}>
+            <Badge kind="neutral">{tool.category}</Badge>
+          </span>
+          <span className="pkt-tb-badge" title={tool.network ? "This tool sends your query to an external service" : "Runs entirely in your browser"} style={{ display: "inline-flex", flex: "none" }}>
+            <Badge kind={tool.network ? "warn" : "ok"} dot>{tool.network ? "Network" : "Local"}</Badge>
+          </span>
         </span>
       ) : null}
-      <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-        {tool ? <SearchTrigger onClick={onOpenPalette} /> : null}
-        <NotesButton />
+      <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, flex: "none" }}>
+        {tool ? <span className="pkt-tb-search" style={{ display: "inline-flex" }}><SearchTrigger onClick={onOpenPalette} /></span> : null}
+        <span className="pkt-tb-notes" style={{ display: "inline-flex" }}><NotesButton /></span>
         <ThemePicker theme={theme} onChange={onSetTheme} dark={darkLevel} onSetDark={onSetDark} />
         <IconButton icon={mode === "dark" ? "sun" : "moon"} label="Toggle light / dark" onClick={onToggleMode} />
       </span>
@@ -261,11 +239,28 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // On small screens, collapse the sidebar to its icon rail so the tool panels
+  // get the width. Fires on load and whenever the viewport crosses the breakpoint
+  // into "narrow"; the user can still expand it manually.
+  React.useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(max-width: 760px)");
+    const apply = () => { if (mq.matches) setNavCollapsed(true); };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   // Resolve tool from URL pathname
   const match = location.pathname.match(/^\/tool\/([^/]+)/);
   const matchedToolId = match ? match[1] : null;
   const normalizedId = matchedToolId === "json" ? "json-formatter" : matchedToolId;
   const tool = normalizedId ? tools.find((t) => t.id === normalizedId) : null;
+
+  // Reflect the active tool in the document title (browser tab, history, bookmarks).
+  React.useEffect(() => {
+    document.title = tool ? `${tool.name} · Pocket` : "Pocket — Fast, private developer tools";
+  }, [tool]);
 
   const handleOpenTool = (t) => {
     setRecents((r) => {

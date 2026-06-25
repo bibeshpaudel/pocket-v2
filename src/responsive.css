@@ -1,0 +1,37 @@
+/* Pocket — responsive / small-screen layout.
+   App-level only: it remaps layout on narrow viewports without touching the
+   design system or any per-tool component. The tool screens use inline
+   `grid-template-columns` for their two-panel (input / output) layout; below the
+   breakpoint we stack those panels vertically. The selector is scoped to the
+   *top-level* tool grid (a direct grandchild of the per-tool [data-screen-label]
+   wrapper — ErrorBoundary/Suspense add no DOM nodes), so nested grids inside a
+   panel are left alone. Inline styles have no !important, so the stylesheet wins. */
+
+@media (max-width: 760px) {
+  [data-screen-label] > div > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    grid-auto-rows: minmax(260px, auto);
+    overflow-y: auto;
+  }
+  .pkt-home-wrap { padding: 24px 16px 56px !important; }
+
+  /* Top bar: drop the wide search box and category chip, tighten spacing, and
+     let the tool name truncate so the essential controls (name, privacy badge,
+     theme + mode) never overlap. Search stays reachable via the sidebar rail. */
+  .pkt-topbar { padding: 0 10px !important; gap: 8px !important; }
+  .pkt-tb-search, .pkt-tb-cat { display: none !important; }
+  .pkt-tb-name { max-width: 38vw; }
+}
+
+/* Very narrow (small phones): also drop the star + notes buttons so the tool
+   name stays readable and the privacy badge + theme/mode controls still fit. */
+@media (max-width: 420px) {
+  .pkt-tb-star, .pkt-tb-notes { display: none !important; }
+  .pkt-tb-name { max-width: 46vw; min-width: 2.5em; }
+}
+
+@media (max-width: 560px) {
+  [data-screen-label] > div > div[style*="grid-template-columns"] {
+    grid-auto-rows: minmax(220px, auto);
+  }
+}
