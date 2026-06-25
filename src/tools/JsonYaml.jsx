@@ -34,7 +34,7 @@ export default function JsonYamlScreen() {
       <ConvertPanels
         inputTitle={json ? "JSON" : "YAML"} outputTitle={json ? "YAML" : "JSON"}
         value={text} onChange={setText} output={output} error={error}
-        okLabel="Converted"
+        okLabel="Converted" lineNumbers
         placeholder={json ? SAMPLE : "name: Pocket\ntags:\n  - fast\n  - local"} />
     </div>
   );

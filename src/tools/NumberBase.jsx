@@ -12,7 +12,7 @@ const COMMON = [{ value: "2", label: "Bin" }, { value: "8", label: "Oct" }, { va
 const OUTPUTS = [["Binary", 2], ["Octal", 8], ["Decimal", 10], ["Hexadecimal", 16]];
 
 export default function NumberBaseScreen() {
-  const [value, setValue] = React.useState("255");
+  const [value, setValue] = React.useState("111");
   const [fromBase, setFromBase] = React.useState("10");
   const [customBase, setCustomBase] = React.useState("36");
 
@@ -59,9 +59,9 @@ export default function NumberBaseScreen() {
               </div>
             ))}
             <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "var(--surface-sunken)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-md)" }}>
-              <span style={{ width: 92, display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 600, textTransform: "uppercase", color: "var(--text-tertiary)" }}>
+              <span style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 600, textTransform: "uppercase", color: "var(--text-tertiary)" }}>
                 Base
-                <Input mono type="number" min={2} max={36} value={customBase} onChange={(e) => setCustomBase(e.target.value)} style={{ width: 52 }} />
+                <Input mono type="number" min={2} max={36} value={customBase} onChange={(e) => setCustomBase(e.target.value)} style={{ width: 64 }} />
               </span>
               <span style={{ flex: 1, fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--text-primary)", wordBreak: "break-all" }}>{out(cb) || "—"}</span>
               {out(cb) ? <CopyButton text={out(cb)} /> : null}

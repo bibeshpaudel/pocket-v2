@@ -147,11 +147,10 @@ three **PDF** tools share `src/tools/file-shared.jsx` (generic Dropzone + read/d
 also for future CSV tools) and are fully client-side: **pdf-to-text** extracts the text layer with
 `pdfjs-dist` (worker via `?url` import; scanned/image PDFs have no text layer — no OCR);
 **merge-pdfs** combines + reorders with `pdf-lib`; **word-to-pdf** converts .docx→HTML with
-`mammoth` (browser bundle); **Download PDF** uses a custom `jsPDF` text renderer (`src/tools/docx-
-pdf.js`) that walks the HTML and emits **selectable text** with whole-line pagination (no mid-glyph
-cuts — unlike rasterized html2canvas); handles headings/inline bold-italic-links/lists/quotes/rules/
-images/code/tables. **Print** (hidden-iframe dialog) best preserves complex layout. Plus HTML
-download. Preview is a forced-light white "paper" (`.docx-page` colours set `!important`). **syntax** (Syntax Highlighter) colourises with `highlight.js`
+`mammoth` (browser bundle); **Download PDF** opens the browser's print engine (hidden-iframe
+dialog → "Save as PDF") for high-fidelity, selectable-text output that best preserves complex
+layout, images and page breaks. Plus HTML download. Preview is a forced-light white "paper"
+(`.docx-page` colours set `!important`). **syntax** (Syntax Highlighter) colourises with `highlight.js`
 (auto-detect uses a common-language subset to avoid mis-detecting short snippets); themes are JS
 scope→colour maps (Pocket reads the app's `--syn-*` tokens, plus GitHub / One Dark) applied as
 **inline styles** so Copy-rich / Copy-HTML / Download produce portable colour that pastes into docs. **mermaid** is a live diagrams-from-text editor (templates,
@@ -221,7 +220,7 @@ escaping) and **`src/tools/cron-util.js`** (parse/describe/next-runs), both fram
 Extra deps installed: `blueimp-md5`, `hash-wasm`, `qrcode`, `react-router-dom`, `heic-to` +
 `heic2any` (HEIC decode for the image tools — `heic-to` primary, `heic2any` fallback; both lazy,
 own chunks), `@peculiar/x509`@^1 (cert-inspector X.509 parsing, lazy chunk), `mermaid` (mermaid editor, lazy
-chunk), `pdfjs-dist` (pdf-to-text) + `pdf-lib` (merge-pdfs) + `mammoth` + `jspdf` (word-to-pdf text PDF),
+chunk), `pdfjs-dist` (pdf-to-text) + `pdf-lib` (merge-pdfs) + `mammoth` (word-to-pdf via print engine),
 `js-yaml` (json-yaml, lazy chunk) —
 all lazy chunks; markdown tool uses
 `marked` + `marked-katex-extension` + `marked-highlight` + `marked-footnote` + `katex` +

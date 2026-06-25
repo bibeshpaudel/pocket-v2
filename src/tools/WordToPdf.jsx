@@ -3,7 +3,6 @@
 // selectable text). The file never leaves the browser. DS primitives + tokens.
 import React from "react";
 import mammoth from "mammoth/mammoth.browser.js";
-import { downloadDocxPdf } from "./docx-pdf.js";
 import { Panel } from "../../Pocket Design System/components/surfaces/Panel.jsx";
 import { Badge } from "../../Pocket Design System/components/core/Badge.jsx";
 import { Button } from "../../Pocket Design System/components/core/Button.jsx";
@@ -55,14 +54,6 @@ function printToPdf(html, title) {
 export default function WordToPdfScreen() {
   const [file, setFile] = React.useState(null);
   const [state, setState] = React.useState({ status: "idle" }); // idle | working | done | error
-  const [downloading, setDownloading] = React.useState(false);
-
-  const downloadPdf = async () => {
-    if (state.status !== "done") return;
-    setDownloading(true);
-    try { await downloadDocxPdf(state.html, file.name.replace(/\.docx$/i, "") + ".pdf"); }
-    catch (e) { /* ignore */ } finally { setDownloading(false); }
-  };
 
   const open = React.useCallback(async (f) => {
     if (!/\.docx$/i.test(f.name)) { setState({ status: "error", message: "Please choose a .docx file. The legacy .doc format isn't supported." }); setFile(f); return; }
@@ -96,14 +87,13 @@ export default function WordToPdfScreen() {
         {state.status === "done" && state.warnings ? <Badge kind="warn">{state.warnings} conversion note{state.warnings === 1 ? "" : "s"}</Badge> : null}
         <span style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           <Button variant="secondary" size="sm" icon="code" disabled={!html} onClick={() => downloadText(`<!doctype html><meta charset="utf-8"><style>${PRINT_CSS}</style>` + html, base + ".html", "text/html")}>HTML</Button>
-          <Button variant="secondary" size="sm" icon="printer" disabled={!html} onClick={() => printToPdf(html, base)}>Print</Button>
-          <Button variant="primary" size="sm" icon="download" disabled={!html || downloading} onClick={downloadPdf}>{downloading ? "Building…" : "Download PDF"}</Button>
+          <Button variant="primary" size="sm" icon="printer" disabled={!html} onClick={() => printToPdf(html, base)}>Download PDF</Button>
           <Button variant="ghost" size="sm" icon="file-up" onClick={() => { setFile(null); setState({ status: "idle" }); }}>New file</Button>
         </span>
       </div>
 
       <div style={{ fontSize: 12, color: "var(--text-tertiary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
-        <Icon name="info" size={12} style={{ marginTop: 2, flex: "none" }} /> <span><strong>Tip:</strong> for the best-looking result, use <strong>Print</strong> and choose “Save as PDF” in the dialog — it preserves complex layout, images and page breaks most faithfully. <strong>Download PDF</strong> is a quick one-click option that produces a text-selectable file, but layout fidelity can be lower.</span>
+        <Icon name="info" size={12} style={{ marginTop: 2, flex: "none" }} /> <span><strong>Tip:</strong> <strong>Download PDF</strong> opens your browser's print dialog — choose “Save as PDF” there. The print engine preserves complex layout, images and page breaks most faithfully, and the text stays selectable.</span>
       </div>
 
       <Panel title="Preview" variant="sunken" style={{ flex: 1, minHeight: 0 }}
@@ -113,8 +103,8 @@ export default function WordToPdfScreen() {
         {state.status === "error" ? (
           <div style={{ padding: "16px", fontFamily: "var(--font-mono)", fontSize: 13, color: "#E08A76" }}>{state.message}</div>
         ) : (
-          <div style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "24px", display: "flex", justifyContent: "center" }}>
-            <div style={{ width: "100%", maxWidth: 820, background: "#ffffff", color: "#1a1a1a", padding: "48px 56px", borderRadius: "var(--radius-sm)", border: "1px solid rgba(0,0,0,0.12)", boxShadow: "0 4px 24px rgba(0,0,0,0.28)", colorScheme: "light" }}>
+          <div style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "24px" }}>
+            <div style={{ width: "100%", maxWidth: 820, margin: "0 auto", background: "#ffffff", color: "#1a1a1a", padding: "48px 56px", borderRadius: "var(--radius-sm)", border: "1px solid rgba(0,0,0,0.12)", boxShadow: "0 4px 24px rgba(0,0,0,0.28)", colorScheme: "light" }}>
               <style dangerouslySetInnerHTML={{ __html: PREVIEW_CSS }} />
               <div className="docx-page" dangerouslySetInnerHTML={{ __html: html || "<p style='color:#999'>Converting…</p>" }} />
             </div>

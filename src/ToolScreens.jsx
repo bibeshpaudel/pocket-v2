@@ -13,6 +13,7 @@ import { EmptyState } from "../Pocket Design System/components/surfaces/EmptySta
 import { Icon } from "../Pocket Design System/components/core/Icon.jsx";
 import { pocketHighlightJSON, pocketHighlightXML } from "./tools-data.js";
 import { useSplitView } from "./split-view.jsx";
+import { JsonTree, XmlTree } from "./tools/tree-view.jsx";
 import md5 from "blueimp-md5";
 import { sha3, blake2b, blake3 } from "hash-wasm";
 import QRCode from "qrcode";
@@ -30,10 +31,11 @@ function sortDeep(v) {
 }
 
 export function JsonFormatterScreen() {
-  const [input, setInput] = React.useState(SAMPLE_JSON);
+  const [input, setInput] = React.useState("");
   const [mode, setMode] = React.useState("Pretty");
   const [indent, setIndent] = React.useState("2");
   const [sortKeys, setSortKeys] = React.useState(false);
+  const [view, setView] = React.useState("Code");
   const sv = useSplitView("Input", "Output");
 
   // Parse state (debounced)
@@ -95,6 +97,7 @@ export function JsonFormatterScreen() {
         <Select options={[{ value: "2", label: "2 spaces" }, { value: "4", label: "4 spaces" }, { value: "tab", label: "Tabs" }]}
           value={indent} onChange={(e) => setIndent(e.target.value)} disabled={mode === "Minify"} />
         <Switch checked={sortKeys} onChange={setSortKeys} label="Sort keys" />
+        <SegmentedControl options={["Code", "Tree"]} value={view} onChange={setView} />
         {sv.control}
         <span style={{ marginLeft: "auto" }}>
           <Button variant="ghost" size="sm" icon="rotate-ccw" onClick={() => setInput(SAMPLE_JSON)}>Sample</Button>
@@ -111,9 +114,10 @@ export function JsonFormatterScreen() {
           actions={<CopyButton onDark getText={() => output} />}>
           {parseError ? (
             <div style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.6, color: "#E08A76" }}>{parseError}</div>
+          ) : view === "Tree" && parsedJson != null ? (
+            <JsonTree data={sortKeys ? sortDeep(parsedJson) : parsedJson} />
           ) : (
-            <pre style={{ margin: 0, padding: "12px 16px", overflow: "auto", flex: 1, fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.6, color: "var(--code-fg)" }}
-              dangerouslySetInnerHTML={{ __html: outputHtml }} />
+            <CodeWithLines text={output} html={outputHtml} />
           )}
         </Panel>
       </div>
@@ -267,10 +271,80 @@ function minifyXMLNode(node) {
   return "";
 }
 
+// Tolerant XML pretty-printer used when the strict DOMParser rejects the input
+// (e.g. unclosed tags). It re-indents the *exact* tokens the user typed — it
+// never invents or drops tags — using a tag stack: a closing tag dedents to its
+// matching open (popping any unclosed tags in between), so malformed XML still
+// formats readably instead of failing outright.
+function formatXMLLenient(src, indentUnit) {
+  const tokenRe = /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<!DOCTYPE[\s\S]*?>|<\?[\s\S]*?\?>|<\/[^>]*>|<[^>]*>|[^<]+/g;
+  const tokens = src.match(tokenRe) || [];
+  const isOpen = (t) => /^</.test(t);
+  const isClose = (t) => /^<\//.test(t.trim());
+  const tagName = (t) => {
+    const m = t.match(/^<\/?\s*([^\s/>]+)/);
+    return m ? m[1] : "";
+  };
+  const stack = [];
+  const out = [];
+  const pad = (n) => indentUnit.repeat(Math.max(0, n));
+
+  for (let i = 0; i < tokens.length; i++) {
+    const raw = tokens[i];
+    if (!isOpen(raw)) {                           // text node
+      const text = raw.trim();
+      if (text) out.push(pad(stack.length) + text);
+      continue;
+    }
+    const tok = raw.trim();
+    if (isClose(tok)) {                            // closing tag — dedent to its open
+      const idx = stack.lastIndexOf(tagName(tok));
+      if (idx !== -1) stack.length = idx;          // drop any unclosed tags in between
+      out.push(pad(stack.length) + tok);
+    } else if (/\/>$/.test(tok) || /^<[!?]/.test(tok)) {  // self-close / decl / comment / doctype / cdata
+      out.push(pad(stack.length) + tok);
+    } else {                                       // opening tag
+      const name = tagName(tok);
+      const next = tokens[i + 1], next2 = tokens[i + 2];
+      // <x>text</x> and <x></x> collapse onto one line
+      if (next != null && !isOpen(next) && next2 != null && isClose(next2) && tagName(next2.trim()) === name) {
+        out.push(pad(stack.length) + tok + next.trim() + next2.trim());
+        i += 2;
+      } else if (next != null && isClose(next) && tagName(next.trim()) === name) {
+        out.push(pad(stack.length) + tok + next.trim());
+        i += 1;
+      } else {
+        out.push(pad(stack.length) + tok);
+        stack.push(name);
+      }
+    }
+  }
+  return out.join("\n");
+}
+
+// Code output with a line-number gutter (sticky on horizontal scroll). `html` is
+// the syntax-highlighted markup; `text` is the plain string used for the count.
+function CodeWithLines({ text, html }) {
+  const count = text ? text.split("\n").length : 0;
+  const gutter = Array.from({ length: count }, (_, i) => i + 1).join("\n");
+  return (
+    <div style={{ display: "flex", flex: 1, minHeight: 0, overflow: "auto" }}>
+      <pre aria-hidden="true" style={{ margin: 0, padding: "12px 12px 12px 16px", position: "sticky", left: 0,
+        background: "var(--code-bg)", color: "var(--syn-comment)", textAlign: "right", userSelect: "none",
+        fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.6, flexShrink: 0,
+        borderRight: "1px solid var(--border-subtle)" }}>{gutter}</pre>
+      <pre style={{ margin: 0, padding: "12px 16px", flex: 1, fontFamily: "var(--font-mono)", fontSize: 13,
+        lineHeight: 1.6, color: "var(--code-fg)" }}
+        dangerouslySetInnerHTML={{ __html: html }} />
+    </div>
+  );
+}
+
 export function XmlFormatterScreen() {
-  const [input, setInput] = React.useState(SAMPLE_XML);
+  const [input, setInput] = React.useState("");
   const [mode, setMode] = React.useState("Pretty");
   const [indent, setIndent] = React.useState("2");
+  const [view, setView] = React.useState("Code");
   const sv = useSplitView("Input", "Output");
 
   // Parse state (debounced)
@@ -328,17 +402,16 @@ export function XmlFormatterScreen() {
     return () => clearTimeout(handler);
   }, [input]);
 
-  // Format the parsed XML (memoized)
+  // Format the parsed XML (memoized). If strict parsing failed but there's
+  // input, fall back to the tolerant re-indenter so malformed XML still formats.
   const output = React.useMemo(() => {
-    if (parseError || !parsedXml) return "";
-    
-    if (mode === "Minify") {
-      return minifyXMLNode(parsedXml);
-    } else {
-      const indentChar = indent === "tab" ? "\t" : " ".repeat(Number(indent));
-      return formatXMLNode(parsedXml, indentChar, 0);
+    const indentChar = indent === "tab" ? "\t" : " ".repeat(Number(indent));
+    if (parseError) {
+      return input.trim() ? formatXMLLenient(input, mode === "Minify" ? "" : indentChar) : "";
     }
-  }, [parsedXml, parseError, mode, indent]);
+    if (!parsedXml) return "";
+    return mode === "Minify" ? minifyXMLNode(parsedXml) : formatXMLNode(parsedXml, indentChar, 0);
+  }, [parsedXml, parseError, mode, indent, input]);
 
   const outputHtml = React.useMemo(() => {
     if (!output) return "";
@@ -351,6 +424,7 @@ export function XmlFormatterScreen() {
         <SegmentedControl options={["Pretty", "Minify"]} value={mode} onChange={setMode} />
         <Select options={[{ value: "2", label: "2 spaces" }, { value: "4", label: "4 spaces" }, { value: "tab", label: "Tabs" }]}
           value={indent} onChange={(e) => setIndent(e.target.value)} disabled={mode === "Minify"} />
+        <SegmentedControl options={["Code", "Tree"]} value={view} onChange={setView} />
         {sv.control}
         <span style={{ marginLeft: "auto" }}>
           <Button variant="ghost" size="sm" icon="rotate-ccw" onClick={() => setInput(SAMPLE_XML)}>Sample</Button>
@@ -363,14 +437,14 @@ export function XmlFormatterScreen() {
             placeholder="Paste XML here…" style={{ flex: 1, padding: "12px 14px", minHeight: 0 }} />
         </Panel>
         <Panel style={sv.rightStyle} title="Output" variant="code"
-          meta={parseError ? <Badge kind="danger">Parse error</Badge> : input.trim() ? <Badge kind="ok" dot>Valid XML</Badge> : null}
+          meta={!input.trim() ? null : parseError ? <Badge kind="warn" dot>Not well-formed</Badge> : <Badge kind="ok" dot>Valid XML</Badge>}
           actions={<CopyButton onDark getText={() => output} />}>
-          {parseError ? (
-            <div style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.6, color: "#E08A76" }}>{parseError}</div>
-          ) : (
-            <pre style={{ margin: 0, padding: "12px 16px", overflow: "auto", flex: 1, fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.6, color: "var(--code-fg)" }}
-              dangerouslySetInnerHTML={{ __html: outputHtml }} />
-          )}
+          {!input.trim() ? null
+            : view === "Tree" && parsedXml != null ? (
+              <XmlTree doc={parsedXml} />
+            ) : (
+              <CodeWithLines text={output} html={outputHtml} />
+            )}
         </Panel>
       </div>
     </div>
@@ -378,7 +452,7 @@ export function XmlFormatterScreen() {
 }
 
 export function Base64Screen() {
-  const [input, setInput] = React.useState("Pocket is awesome");
+  const [input, setInput] = React.useState("");
   const [mode, setMode] = React.useState("Encode");
   const sv = useSplitView("Input", "Output");
 
@@ -1059,7 +1133,7 @@ export function TimezoneConverterScreen() {
 }
 
 export function QrCodeScreen() {
-  const [input, setInput] = React.useState("https://pocket-live.vercel.app");
+  const [input, setInput] = React.useState("https://usepocket.vercel.app/");
   const [qrDataUrl, setQrDataUrl] = React.useState("");
 
   React.useEffect(() => {
