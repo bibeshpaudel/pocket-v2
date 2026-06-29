@@ -208,7 +208,7 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [favorites, setFavorites] = React.useState(() => load("pocket-favs", ["json-formatter", "password", "uuid"]));
+  const [favorites, setFavorites] = React.useState(() => load("pocket-favs", []));
   const [recents, setRecents] = React.useState(() => load("pocket-recents", ["hash", "base64"]));
   const [theme, setTheme] = React.useState(() => normalizeTheme(load("pocket-theme", "amber")));
   const [mode, setMode] = React.useState(() => normalizeMode(load("pocket-theme", "amber"), load("pocket-mode", null)));
