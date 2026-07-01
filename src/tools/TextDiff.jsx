@@ -45,11 +45,14 @@ const css = `
 .pkt-diff-wdel { border-bottom: 2px solid var(--danger); font-weight: var(--weight-medium); }
 .pkt-diff-fold {
   grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 5px 14px;
+  width: 100%; margin: 0; text-align: left; border-radius: 0; appearance: none;
   background: var(--surface-app); color: var(--text-tertiary); cursor: pointer;
+  border: none;
   border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
   font-size: var(--text-xs); font-family: var(--font-sans);
 }
 .pkt-diff-fold:hover { color: var(--text-secondary); }
+.pkt-diff-fold:focus-visible { outline: 2px solid var(--amber-500); outline-offset: -2px; }
 `;
 if (typeof document !== "undefined" && !document.getElementById("pkt-css-diff")) {
   const s = document.createElement("style"); s.id = "pkt-css-diff"; s.textContent = css;
@@ -241,9 +244,9 @@ export default function TextDiffScreen() {
           <div className={"pkt-diff " + (view === "Split" ? "pkt-diff-split" : "pkt-diff-inline")}>
             {items.map((it) =>
               it.kind === "fold" ? (
-                <div key={it.key} className="pkt-diff-fold" onClick={() => expandFold(it.id)}>
+                <button key={it.key} type="button" className="pkt-diff-fold" onClick={() => expandFold(it.id)}>
                   ⋯ {it.count} unchanged line{it.count === 1 ? "" : "s"} — click to expand
-                </div>
+                </button>
               ) : view === "Split"
                 ? <React.Fragment key={it.key}><SplitRow row={it.row} /></React.Fragment>
                 : <React.Fragment key={it.key}><InlineRows row={it.row} /></React.Fragment>

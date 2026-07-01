@@ -3,6 +3,7 @@
 // selectable text). The file never leaves the browser. DS primitives + tokens.
 import React from "react";
 import mammoth from "mammoth/mammoth.browser.js";
+import DOMPurify from "dompurify";
 import { Panel } from "../../Pocket Design System/components/surfaces/Panel.jsx";
 import { Badge } from "../../Pocket Design System/components/core/Badge.jsx";
 import { Button } from "../../Pocket Design System/components/core/Button.jsx";
@@ -61,7 +62,11 @@ export default function WordToPdfScreen() {
     try {
       const arrayBuffer = await readArrayBuffer(f);
       const result = await mammoth.convertToHtml({ arrayBuffer });
-      setState({ status: "done", html: result.value || "<p><em>(empty document)</em></p>", warnings: (result.messages || []).length });
+      // mammoth emits HTML from an untrusted local file — sanitize before it hits any
+      // dangerouslySetInnerHTML sink (preview + HTML/PDF export). Keep data: image URIs
+      // so embedded images (base64) survive.
+      const clean = DOMPurify.sanitize(result.value || "<p><em>(empty document)</em></p>");
+      setState({ status: "done", html: clean, warnings: (result.messages || []).length });
     } catch (e) {
       setState({ status: "error", message: (e && e.message) || "Could not convert this document." });
     }

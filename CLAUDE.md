@@ -1,7 +1,7 @@
 # Pocket
 
 A fast, **100% client-side** developer toolkit (formatters, generators, converters, debuggers).
-Warm "paper-and-ink" aesthetic, amber accent, keyboard-first, ⌘K command palette. ~35 tools
+Warm "paper-and-ink" aesthetic, amber accent, keyboard-first, ⌘K command palette. 45 tools
 across 10 categories. Built by **assembling a pre-made design system** — see the strict contract below.
 
 ## Commands
@@ -17,7 +17,8 @@ npm run icons    # regenerate the vendored Lucide icon map (also runs pre dev/bu
 
 Node + Vite 5 + React 18. **Tests:** Vitest (`vitest.config.js`, kept separate from
 `vite.config.js` so the prod build never imports vitest); specs live next to source as
-`*.test.js` (currently `src/tools/csv-shared.test.js` covers the CSV engine). No linter wired in yet.
+`*.test.js` (currently `csv-shared.test.js`, `text-convert.test.js`, and `cron-util.test.js` in
+`src/tools/` cover the CSV, text-convert, and cron engines). No linter wired in yet.
 A `predev`/`prebuild` hook runs `scripts/build-icons.mjs` to (re)generate the local icon map.
 
 ## Repo layout
