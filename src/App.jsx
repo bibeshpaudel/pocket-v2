@@ -60,6 +60,7 @@ const TextEscapeScreen = lazy(() => import("./tools/TextEscape.jsx"));
 const SlugifyScreen = lazy(() => import("./tools/Slugify.jsx"));
 const UlidNanoidScreen = lazy(() => import("./tools/UlidNanoid.jsx"));
 const SampleDataScreen = lazy(() => import("./tools/SampleData.jsx"));
+const EnvInspectorScreen = lazy(() => import("./tools/EnvInspector.jsx"));
 const StubScreen = lazy(() =>
   import("./ToolScreens.jsx").then((m) => ({ default: m.StubScreen }))
 );
@@ -111,6 +112,7 @@ const TOOL_REGISTRY = {
   "slugify": SlugifyScreen,
   "ulid": UlidNanoidScreen,
   "sample-data": SampleDataScreen,
+  "env-inspector": EnvInspectorScreen,
 };
 
 function load(key, fallback) {

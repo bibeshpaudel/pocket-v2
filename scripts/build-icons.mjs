@@ -27,7 +27,7 @@ const PATTERNS = [
 
 // A few icons are referenced indirectly (e.g. computed) — pin them so they're
 // always vendored regardless of how the scan goes.
-const ALWAYS = ["loader", "loader-circle", "triangle-alert", "wrench", "x", "check", "copy", "download", "star", "chevron-right", "chevron-down", "sun", "moon", "search", "info", "upload"];
+const ALWAYS = ["loader", "loader-circle", "triangle-alert", "wrench", "x", "check", "copy", "download", "star", "chevron-right", "chevron-down", "chevron-up", "chevrons-down", "chevrons-up", "sun", "moon", "search", "info", "upload"];
 
 function walk(dir, out) {
   if (!existsSync(dir)) return out;

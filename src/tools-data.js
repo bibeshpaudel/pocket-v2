@@ -48,6 +48,7 @@ export const POCKET_TOOLS = [
   { id: "url-codec", name: "URL Encoder / Decoder", category: "Web", icon: "link", description: "Percent-encoding" },
   { id: "ip-lookup", name: "IP Lookup", category: "Web", icon: "map-pin", description: "Where an address lives", network: true },
   { id: "dns-lookup", name: "DNS Lookup", category: "Web", icon: "server", description: "A, MX, TXT records", network: true },
+  { id: "env-inspector", name: "Environment Inspector", category: "Web", icon: "activity", description: "Browser & device diagnostics" },
   { id: "color-converter", name: "Color Converter", category: "Converters", icon: "palette", description: "HEX, RGB, HSL, HSV" },
   { id: "number-base", name: "Number Base Converter", category: "Converters", icon: "calculator", description: "Bin, oct, dec, hex" },
   { id: "json-yaml", name: "JSON ↔ YAML", category: "Converters", icon: "arrow-left-right", description: "Both directions" },
