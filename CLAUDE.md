@@ -1,7 +1,7 @@
 # Pocket
 
 A fast, **100% client-side** developer toolkit (formatters, generators, converters, debuggers).
-Warm "paper-and-ink" aesthetic, amber accent, keyboard-first, ⌘K command palette. 45 tools
+Warm "paper-and-ink" aesthetic, amber accent, keyboard-first, ⌘K command palette. 46 tools
 across 10 categories. Built by **assembling a pre-made design system** — see the strict contract below.
 
 ## Commands
@@ -17,8 +17,8 @@ npm run icons    # regenerate the vendored Lucide icon map (also runs pre dev/bu
 
 Node + Vite 5 + React 18. **Tests:** Vitest (`vitest.config.js`, kept separate from
 `vite.config.js` so the prod build never imports vitest); specs live next to source as
-`*.test.js` (currently `csv-shared.test.js`, `text-convert.test.js`, and `cron-util.test.js` in
-`src/tools/` cover the CSV, text-convert, and cron engines). No linter wired in yet.
+`*.test.js` (currently `csv-shared.test.js`, `text-convert.test.js`, `cron-util.test.js`, and
+`env-inspect.test.js` in `src/tools/` cover the CSV, text-convert, cron, and env-inspect engines). No linter wired in yet.
 A `predev`/`prebuild` hook runs `scripts/build-icons.mjs` to (re)generate the local icon map.
 
 ## Repo layout
@@ -135,14 +135,14 @@ own equivalent (`Split|Editor|Preview`).
 
 ## Current status (as of 2026-06-21)
 
-**45 tools fully built:** json-formatter, xml-formatter, base64, hash (MD5/SHA-1/256/512/SHA3/
+**46 tools fully built:** json-formatter, xml-formatter, base64, hash (MD5/SHA-1/256/512/SHA3/
 BLAKE2/BLAKE3), unit, timestamp, timezone, password, qr-code, lorem-ipsum, uuid (v1/v4/v7), case,
 word-counter, regex, **url-codec** (encode/decode + URL parser) (all in `ToolScreens.jsx`);
 **git-cheatsheet**, **diff**, **markdown**, **aes**, **jwt**, **cert-inspector**, **mermaid**,
 **compiler**, **syntax**, **ip-lookup**, **dns-lookup**, **image-compressor**, **image-converter**,
 **svg-viewer**, **image-analyzer**, **pdf-to-text**, **merge-pdfs**, **word-to-pdf**, **csv-json**,
 **csv-sql**, **csv-editor**, **color-converter**, **number-base**, **json-yaml**, **cron**,
-**env-json**, **text-escape**, **slugify**, **ulid**, **sample-data** (in
+**env-json**, **text-escape**, **slugify**, **ulid**, **sample-data**, **env-inspector** (in
 `src/tools/`, own lazy chunks + data/engine files — the preferred pattern for heavier tools). The
 three **PDF** tools share `src/tools/file-shared.jsx` (generic Dropzone + read/download/formatBytes,
 also for future CSV tools) and are fully client-side: **pdf-to-text** extracts the text layer with
@@ -217,6 +217,18 @@ for these lives in **`src/tools/text-convert.js`** (number base, slugify, env pa
 escaping) and **`src/tools/cron-util.js`** (parse/describe/next-runs), both framework-free and unit-tested
 (`text-convert.test.js`, `cron-util.test.js`). The convert-style tools share **`src/tools/convert-panels.jsx`**
 (a 2-panel input→output scaffold). Color/number-base/cron use their own bespoke layouts.
+
+**env-inspector** (Environment Inspector, `src/tools/EnvInspector.jsx` + engine
+`src/tools/env-inspect.js`, unit-tested) is a client-side diagnostics dashboard: collapsible
+section panels (System / Browser / Network-live / Security / GPU / Storage / Privacy-mode
+heuristic / Permissions / Media devices / API capabilities) rendered from `{label, value,
+status, note}` rows where status ∈ ok|estimated|unavailable|restricted drives a transparency
+badge on every heuristic or missing value. Permission states are queried passively (no
+prompts), media devices are counted without labels, async collectors race a 4s timeout so no
+panel spins forever, and online/offline + `navigator.connection` change events update live.
+Copy-JSON / Download produce a structured report. The only network feature — public IP / ISP /
+proxy flag via freeipapi.com (fallback ipapi.co) — is opt-in behind a button and marked with a
+"network" badge; everything else stays local, so the tool itself is badged Local.
 
 Extra deps installed: `blueimp-md5`, `hash-wasm`, `qrcode`, `react-router-dom`, `heic-to` +
 `heic2any` (HEIC decode for the image tools — `heic-to` primary, `heic2any` fallback; both lazy,
