@@ -164,11 +164,14 @@ export default function EnvInspectorScreen() {
     });
     setUpdatedAt(new Date());
     const fill = (id) => (rows) => setData((d) => ({ ...d, [id]: rows }));
-    const fail = (id, msg) => () => fill(id)([{ label: msg, value: null, status: "unavailable", note: null, mono: false }]);
-    collectStorage().then(fill("storage"), fail("storage", "Storage checks failed"));
-    estimatePrivateMode().then(fill("privacy"), fail("privacy", "Private-mode heuristic failed"));
-    collectPermissions().then(fill("permissions"), fail("permissions", "Permission queries failed"));
-    collectDevices().then(fill("devices"), fail("devices", "Device enumeration failed"));
+    const fail = (id, msg) => () => fill(id)([{ label: msg, value: null, status: "unavailable", note: "The browser never answered — the API may be unsupported or blocked here.", mono: false }]);
+    // Some browsers let these promises hang (e.g. enumerateDevices in headless
+    // or locked-down modes) — race a timeout so no panel spins forever.
+    const within = (p, ms = 4000) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
+    within(collectStorage()).then(fill("storage"), fail("storage", "Storage checks failed"));
+    within(estimatePrivateMode()).then(fill("privacy"), fail("privacy", "Private-mode heuristic failed"));
+    within(collectPermissions()).then(fill("permissions"), fail("permissions", "Permission queries failed"));
+    within(collectDevices()).then(fill("devices"), fail("devices", "Device enumeration failed"));
   }, []);
 
   React.useEffect(() => { refresh(); }, [refresh]);

@@ -5,6 +5,8 @@ import { Icon } from "../Pocket Design System/components/core/Icon.jsx";
 import { IconButton } from "../Pocket Design System/components/core/IconButton.jsx";
 import { CommandPalette } from "../Pocket Design System/components/navigation/CommandPalette.jsx";
 import { Badge } from "../Pocket Design System/components/core/Badge.jsx";
+import { Button } from "../Pocket Design System/components/core/Button.jsx";
+import { EmptyState } from "../Pocket Design System/components/surfaces/EmptyState.jsx";
 import { HomeScreen, SearchTrigger } from "./HomeScreen.jsx";
 import { Sidebar } from "./Sidebar.jsx";
 import { ThemePicker, normalizeTheme, normalizeMode, normalizeDark } from "./ThemePicker.jsx";
@@ -171,6 +173,31 @@ function TopBar({ tool, onHome, onOpenPalette, starred, onStar, theme, onSetThem
   );
 }
 
+const SITE_URL = "https://usepocket.vercel.app";
+
+// Update an existing <meta> tag in index.html, or create it if it isn't there.
+function setMeta(attr, key, content) {
+  let el = document.head.querySelector(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
+function NotFoundScreen({ onHome }) {
+  return (
+    <div data-screen-label="Not found" style={{ flex: 1, minHeight: 0, padding: "14px 16px 16px", display: "grid", placeItems: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-4)" }}>
+        <EmptyState icon="compass" title="This page doesn't exist"
+          hint="The link may be mistyped or out of date. Try the tool list or press ⌘K to search." />
+        <Button variant="secondary" size="sm" icon="house" onClick={onHome}>Back to home</Button>
+      </div>
+    </div>
+  );
+}
+
 function ToolPageWrapper({ tools, openTool }) {
   const { toolId } = useParams();
   
@@ -259,9 +286,26 @@ export default function App() {
   const normalizedId = matchedToolId === "json" ? "json-formatter" : matchedToolId;
   const tool = normalizedId ? tools.find((t) => t.id === normalizedId) : null;
 
-  // Reflect the active tool in the document title (browser tab, history, bookmarks).
+  // Reflect the active tool in the document title (browser tab, history, bookmarks)
+  // and in the canonical/social tags, so every /tool/:id URL describes itself instead
+  // of inheriting the home page's metadata.
   React.useEffect(() => {
-    document.title = tool ? `${tool.name} · Pocket` : "Pocket — Fast, private developer tools";
+    const title = tool ? `${tool.name} · Pocket` : "Pocket — Fast, private developer tools";
+    const description = tool
+      ? `${tool.name} — ${tool.description}. Free, fast and 100% client-side: nothing you paste leaves your browser.`
+      : "A fast, 100% client-side developer toolkit: JSON/XML formatters, hashing, JWT, regex, CSV converters, image tools and 40+ more. Nothing you paste leaves your browser.";
+    const url = SITE_URL + (tool ? `/tool/${tool.id}` : "/");
+
+    document.title = title;
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", url);
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", description);
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
   }, [tool]);
 
   const handleOpenTool = (t) => {
@@ -319,6 +363,7 @@ export default function App() {
             <Route path="/tool/:toolId" element={
               <ToolPageWrapper tools={tools} openTool={handleOpenTool} />
             } />
+            <Route path="*" element={<NotFoundScreen onHome={() => navigate("/")} />} />
           </Routes>
         </div>
       </div>
